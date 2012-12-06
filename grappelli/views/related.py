@@ -6,6 +6,7 @@ import operator
 # DJANGO IMPORTS
 from django.http import HttpResponse, HttpResponseForbidden, HttpResponseNotFound
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models.query import QuerySet
 from django.views.decorators.cache import never_cache
 from django.utils.translation import ugettext as _
@@ -69,7 +70,7 @@ def m2m_lookup(request):
                         try:
                             obj = model.objects.get(pk=obj_id)
                             data.append({"value":obj.pk,"label":get_label(obj)})
-                        except obj.DoesNotExist:
+                        except ObjectDoesNotExist:
                             data.append({"value":obj_id,"label":_("?")})
             return HttpResponse(simplejson.dumps(data), mimetype='application/javascript')
     data = [{"value":None,"label":""}]
